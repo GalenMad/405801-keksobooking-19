@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Galen Mad](https://up.htmlacademy.ru/javascript/19/user/405801).
-* Наставник: `Неизвестно`.
+* Наставник: [Дмитрий Быков](https://htmlacademy.ru/profile/id618225).
 
 ---
 
