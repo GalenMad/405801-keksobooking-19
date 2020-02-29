@@ -58,7 +58,7 @@ function generateRandomAds() {
         y: getRandomInteger(COORDINATES_RANGE_Y[0], COORDINATES_RANGE_Y[1])
       },
       offer: {
-        title: 'Заголовок предложения',
+        title: 'Заголовок предложения ' + i,
         price: getRandomInteger(100, 1000),
         type: hotelTypes[getRandomInteger(0, 3)],
         rooms: getRandomInteger(1, 8),
@@ -66,7 +66,7 @@ function generateRandomAds() {
         checkin: timingOptions[getRandomInteger(0, 2)],
         checkout: timingOptions[getRandomInteger(0, 2)],
         features: getRandomSliceArray(featuresList),
-        description: 'Описание предложения',
+        description: 'Описание предложения ' + i,
         photos: getRandomSliceArray(photosList),
       }
     };
@@ -77,21 +77,8 @@ function generateRandomAds() {
 }
 
 function createAdCards(adsArray) {
-  var ad = adsArray[0];
-  var adOffer = ad.offer;
+
   var templateList = document.createDocumentFragment();
-  var offerCard = adCardTemplate.cloneNode(true);
-  var offerAvatar = offerCard.querySelector('.popup__avatar');
-  var offerTitle = offerCard.querySelector('.popup__title');
-  var offerAddress = offerCard.querySelector('.popup__text--address');
-  var offerPrice = offerCard.querySelector('.popup__text--price');
-  var offerType = offerCard.querySelector('.popup__type');
-  var offerCapacity = offerCard.querySelector('.popup__text--capacity');
-  var offerTiming = offerCard.querySelector('.popup__text--time');
-  var offerFeatures = offerCard.querySelector('.popup__features');
-  var offerDescription = offerCard.querySelector('.popup__description');
-  var offerPhotos = offerCard.querySelector('.popup__photos');
-  var templatePhoto = offerPhotos.querySelector('.popup__photo');
 
   function declOfNum(number, titles) {
     var cases = [2, 0, 1, 1, 1, 2];
@@ -100,110 +87,136 @@ function createAdCards(adsArray) {
 
   function checkData(key, element, callback) {
     if (key) {
-      callback(key);
+      callback(element, key);
     } else {
       element.remove();
     }
   }
 
-  function createFeatures() {
-    offerFeatures.innerHTML = '';
-    var features = document.createDocumentFragment();
-    for (var i = adOffer.features.length - 1; i >= 0; i--) {
-      var feature = document.createElement('li');
-      feature.className = 'popup__feature popup__feature--' + adOffer.features[i];
-      features.prepend(feature);
-    }
-    return features;
-  }
-
-  function createPhotos() {
-    templatePhoto.remove();
-    var photos = document.createDocumentFragment();
-    for (var k = adOffer.photos.length - 1; k >= 0; k--) {
-      var photo = templatePhoto.cloneNode(false);
-      photo.src = adOffer.photos[k];
-      photos.prepend(photo);
-    }
-    return photos;
-  }
-
-  function getOfferType() {
-    if (adOffer.type === 'bungalo') {
+  function getOfferType(key) {
+    if (key === 'bungalo') {
       return 'Бунгало';
-    } else if (adOffer.type === 'house') {
+    } else if (key === 'house') {
       return 'Дом';
-    } else if (adOffer.type === 'flat') {
+    } else if (key === 'flat') {
       return 'Квартира';
-    } else if (adOffer.type === 'palace') {
+    } else if (key === 'palace') {
       return 'Дворец';
     } else {
       return null;
     }
   }
 
-  function setOfferAvatar(key) {
-    offerAvatar.src = key;
+  function createPhotos(key) {
+    if (key.length) {
+      var photos = document.createDocumentFragment();
+      for (var k = key.length - 1; k >= 0; k--) {
+        var photo = templatePhoto.cloneNode(false);
+        photo.src = key[k];
+        photos.prepend(photo);
+      }
+      return photos;
+    } else {
+      return null;
+    }
   }
 
-  function setOfferTitle(key) {
-    offerTitle.textContent = key;
+  function createFeatures(key) {
+    if (key.length) {
+      var features = document.createDocumentFragment();
+      for (var k = key.length - 1; k >= 0; k--) {
+        var feature = document.createElement('li');
+        feature.className = 'popup__feature popup__feature--' + key[k];
+        features.prepend(feature);
+      }
+      return features;
+    } else {
+      return null;
+    }
   }
 
-  function setOfferAddress(key) {
-    offerAddress.textContent = key;
+  function setOfferAvatar(element, key) {
+    element.src = key;
   }
 
-  function setOfferPrice(key) {
-    offerPrice.textContent = key + '₽/ночь';
+  function setOfferTitle(element, key) {
+    element.textContent = key;
   }
 
-  function setOfferType(key) {
-    offerType.textContent = getOfferType(key);
+  function setOfferAddress(element, key) {
+    element.textContent = key;
   }
 
-  function setOfferRooms(key) {
-    offerCapacity.textContent = key + ' ' + declOfNum(key, ['комната', 'комнаты', 'комнат']);
+  function setOfferPrice(element, key) {
+    element.textContent = key + '₽/ночь';
   }
 
-  function setOfferCapacity(key) {
-    offerCapacity.textContent += ' для ' + key + ' ' + declOfNum(key, ['гостя', 'гостей', 'гостей']);
+  function setOfferType(element, key) {
+    element.textContent = key;
   }
 
-  function setOfferCheckIn(key) {
-    offerTiming.textContent = 'Заезд после ' + key;
+  function setOfferRooms(element, key) {
+    element.textContent = key + ' ' + declOfNum(key, ['комната', 'комнаты', 'комнат']);
   }
 
-  function setOfferCheckOut(key) {
-    offerTiming.textContent += ', выезд до ' + key;
+  function setOfferCapacity(element, key) {
+    element.textContent += ' для ' + key + ' ' + declOfNum(key, ['гостя', 'гостей', 'гостей']);
   }
 
-  function setOfferDescription(key) {
-    offerDescription.textContent = key;
+  function setOfferCheckIn(element, key) {
+    element.textContent = 'Заезд после ' + key;
   }
 
-  function setOfferFeatures() {
-    offerFeatures.append(createFeatures());
+  function setOfferCheckOut(element, key) {
+    element.textContent += ', выезд до ' + key;
   }
 
-  function setOfferPhotos() {
-    offerPhotos.append(createPhotos());
+  function setOfferDescription(element, key) {
+    element.textContent = key;
   }
 
-  checkData(ad.author.avatar, offerAvatar, setOfferAvatar);
-  checkData(adOffer.title, offerTitle, setOfferTitle);
-  checkData(adOffer.address, offerAddress, setOfferAddress);
-  checkData(adOffer.price, offerPrice, setOfferPrice);
-  checkData(adOffer.type, offerType, setOfferType);
-  checkData(adOffer.rooms, offerCapacity, setOfferRooms);
-  checkData(adOffer.guests, offerCapacity, setOfferCapacity);
-  checkData(adOffer.checkin, offerTiming, setOfferCheckIn);
-  checkData(adOffer.checkout, offerTiming, setOfferCheckOut);
-  checkData(adOffer.description, offerDescription, setOfferDescription);
-  checkData(adOffer.features.length, offerFeatures, setOfferFeatures);
-  checkData(adOffer.photos.length, offerPhotos, setOfferPhotos);
+  function setOfferFeatures(element, key) {
+    element.append(key);
+  }
 
-  templateList.append(offerCard);
+  function setOfferPhotos(element, key) {
+    element.append(key);
+  }
+
+  for (var i = adsArray.length - 1; i >= 0; --i) {
+
+    var ad = adsArray[i];
+    var adOffer = ad.offer;
+    var offerCard = adCardTemplate.cloneNode(true);
+    var offerAvatar = offerCard.querySelector('.popup__avatar');
+    var offerTitle = offerCard.querySelector('.popup__title');
+    var offerAddress = offerCard.querySelector('.popup__text--address');
+    var offerPrice = offerCard.querySelector('.popup__text--price');
+    var offerType = offerCard.querySelector('.popup__type');
+    var offerCapacity = offerCard.querySelector('.popup__text--capacity');
+    var offerTiming = offerCard.querySelector('.popup__text--time');
+    var offerFeatures = offerCard.querySelector('.popup__features');
+    var offerDescription = offerCard.querySelector('.popup__description');
+    var offerPhotos = offerCard.querySelector('.popup__photos');
+    var templatePhoto = offerPhotos.querySelector('.popup__photo');
+
+    offerFeatures.innerHTML = '';
+    templatePhoto.remove();
+
+    checkData(ad.author.avatar, offerAvatar, setOfferAvatar);
+    checkData(adOffer.title, offerTitle, setOfferTitle);
+    checkData(adOffer.address, offerAddress, setOfferAddress);
+    checkData(adOffer.price, offerPrice, setOfferPrice);
+    checkData(getOfferType(adOffer.type), offerType, setOfferType);
+    checkData(adOffer.rooms, offerCapacity, setOfferRooms);
+    checkData(adOffer.guests, offerCapacity, setOfferCapacity);
+    checkData(adOffer.checkin, offerTiming, setOfferCheckIn);
+    checkData(adOffer.checkout, offerTiming, setOfferCheckOut);
+    checkData(adOffer.description, offerDescription, setOfferDescription);
+    checkData(createFeatures(adOffer.features), offerFeatures, setOfferFeatures);
+    checkData(createPhotos(adOffer.photos), offerPhotos, setOfferPhotos);
+    templateList.append(offerCard);
+  }
   return templateList;
 }
 
