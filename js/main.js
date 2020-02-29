@@ -275,16 +275,6 @@ function createAdPins(adsArray) {
 function renderAds(adsArray) {
   adList.prepend(createAdPins(adsArray));
   map.insertBefore(createAdCards(adsArray), mapFilter);
-
-  var pins = map.querySelectorAll('.map__pin');
-  var cards = map.querySelectorAll('.map__card');
-
-  function closeAllOfferCards() {
-    var cards = map.querySelectorAll('.map__card');
-    for (var i = cards.length - 1; i >= 0; --i) {
-      cards[i].classList.add('hidden');
-    }
-  }
 }
 
 function deactivateForm() {
