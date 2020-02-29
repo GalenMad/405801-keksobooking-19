@@ -209,7 +209,7 @@ function createAdCards(adsArray) {
 
 function createAdPins(adsArray) {
   var adTemplateList = document.createDocumentFragment();
-  for (var i = adCount - 1; i >= 0; --i) {
+  for (var i = adsArray.length - 1; i >= 0; --i) {
     var adElement = adTemplate.cloneNode(true);
     var adElementImage = adElement.querySelector('img');
     var adCoordinateX = adsArray[i].location.x - PIN_WIDTH / 2;
