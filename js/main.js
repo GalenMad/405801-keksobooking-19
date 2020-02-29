@@ -1,6 +1,7 @@
 'use strict';
 
 var ENTER_KEY = 'Enter';
+var ESC_KEY = 'Escape';
 var COORDINATE_CORRECTION_X = 32.5;
 var COORDINATE_CORRECTION_Y = 75;
 var PIN_WIDTH = 50;
@@ -124,9 +125,9 @@ function createAdCards(adsArray) {
   function createFeatures(key) {
     if (key.length) {
       var features = document.createDocumentFragment();
-      for (var k = key.length - 1; k >= 0; k--) {
+      for (var t = key.length - 1; t >= 0; t--) {
         var feature = document.createElement('li');
-        feature.className = 'popup__feature popup__feature--' + key[k];
+        feature.className = 'popup__feature popup__feature--' + key[t];
         features.prepend(feature);
       }
       return features;
@@ -223,24 +224,67 @@ function createAdCards(adsArray) {
 }
 
 function createAdPins(adsArray) {
-  var adTemplateList = document.createDocumentFragment();
+  var templateList = document.createDocumentFragment();
   for (var i = adsArray.length - 1; i >= 0; --i) {
-    var adElement = adTemplate.cloneNode(true);
-    adElement.setAttribute('data-offer-id', i+1);
-    var adElementImage = adElement.querySelector('img');
+    var offerPin = adTemplate.cloneNode(true);
+    offerPin.setAttribute('data-offer-id', i + 1);
+    var adElementImage = offerPin.querySelector('img');
     var adCoordinateX = adsArray[i].location.x - PIN_WIDTH / 2;
     var adCoordinateY = adsArray[i].location.y - PIN_HEIGHT;
-    adElement.setAttribute('style', 'left:' + adCoordinateX + 'px; top:' + adCoordinateY + 'px;');
+    offerPin.setAttribute('style', 'left:' + adCoordinateX + 'px; top:' + adCoordinateY + 'px;');
     adElementImage.setAttribute('src', adsArray[i].author.avatar);
     adElementImage.setAttribute('alt', adsArray[i].offer.title);
-    adTemplateList.append(adElement);
+
+    offerPin.addEventListener('click', function () {
+
+      var cards = map.querySelectorAll('.map__card');
+      var currentCard;
+
+      for (var j = cards.length - 1; j >= 0; --j) {
+        cards[j].classList.add('hidden');
+        var pinId = offerPin.getAttribute('data-offer-id');
+        var targetId = cards[j].getAttribute('data-offer-id');
+        if (targetId === pinId) {
+          currentCard = cards[j];
+        }
+      }
+
+      var currentCardClose = currentCard.querySelector('.popup__close');
+      currentCard.classList.remove('hidden');
+
+      var closePopup = function () {
+        currentCard.classList.add('hidden');
+        document.removeEventListener('keydown', onPopupEscPress);
+      };
+
+      var onPopupEscPress = function (evt) {
+        if (evt.key === ESC_KEY) {
+          closePopup();
+        }
+      };
+
+      currentCardClose.addEventListener('click', closePopup);
+      document.addEventListener('keydown', onPopupEscPress);
+
+    });
+    templateList.append(offerPin);
   }
-  return adTemplateList;
+  return templateList;
 }
 
 function renderAds(adsArray) {
   adList.prepend(createAdPins(adsArray));
   map.insertBefore(createAdCards(adsArray), mapFilter);
+
+  var pins = map.querySelectorAll('.map__pin');
+  var cards = map.querySelectorAll('.map__card');
+
+  function closeAllOfferCards() {
+    var cards = map.querySelectorAll('.map__card');
+    for (var i = cards.length - 1; i >= 0; --i) {
+      cards[i].classList.add('hidden');
+    }
+  }
 }
 
 function deactivateForm() {
@@ -308,4 +352,3 @@ form.addEventListener('change', function (evt) {
 validationRoomNumberAndCapacity();
 deactivateForm();
 setMainPinCoordinates();
-
