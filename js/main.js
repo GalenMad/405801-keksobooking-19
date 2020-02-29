@@ -236,8 +236,8 @@ function createAdPins(adsArray) {
 }
 
 function renderAds(adsArray) {
-  adList.prepend(createAdCards(adsArray));
-  map.insertBefore(createAdPins(adsArray), mapFilter);
+  adList.prepend(createAdPins(adsArray));
+  map.insertBefore(createAdCards(adsArray), mapFilter);
 }
 
 function deactivateForm() {
