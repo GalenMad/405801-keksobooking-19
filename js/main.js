@@ -202,6 +202,8 @@ function createAdCards(adsArray) {
 
     offerFeatures.innerHTML = '';
     templatePhoto.remove();
+    offerCard.classList.add('hidden');
+    offerCard.setAttribute('data-offer-id', i + 1);
 
     checkData(ad.author.avatar, offerAvatar, setOfferAvatar);
     checkData(adOffer.title, offerTitle, setOfferTitle);
@@ -224,6 +226,7 @@ function createAdPins(adsArray) {
   var adTemplateList = document.createDocumentFragment();
   for (var i = adsArray.length - 1; i >= 0; --i) {
     var adElement = adTemplate.cloneNode(true);
+    adElement.setAttribute('data-offer-id', i+1);
     var adElementImage = adElement.querySelector('img');
     var adCoordinateX = adsArray[i].location.x - PIN_WIDTH / 2;
     var adCoordinateY = adsArray[i].location.y - PIN_HEIGHT;
@@ -305,3 +308,4 @@ form.addEventListener('change', function (evt) {
 validationRoomNumberAndCapacity();
 deactivateForm();
 setMainPinCoordinates();
+
