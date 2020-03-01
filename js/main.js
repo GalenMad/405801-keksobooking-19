@@ -235,14 +235,15 @@ function createAdPins(adsArray) {
     adElementImage.setAttribute('src', adsArray[i].author.avatar);
     adElementImage.setAttribute('alt', adsArray[i].offer.title);
 
-    offerPin.addEventListener('click', function () {
+    offerPin.addEventListener('click', function (evt) {
+
+      var pinId = evt.currentTarget.getAttribute('data-offer-id');
 
       var cards = map.querySelectorAll('.map__card');
       var currentCard;
 
       for (var j = cards.length - 1; j >= 0; --j) {
         cards[j].classList.add('hidden');
-        var pinId = offerPin.getAttribute('data-offer-id');
         var targetId = cards[j].getAttribute('data-offer-id');
         if (targetId === pinId) {
           currentCard = cards[j];
@@ -257,8 +258,8 @@ function createAdPins(adsArray) {
         document.removeEventListener('keydown', onPopupEscPress);
       };
 
-      var onPopupEscPress = function (evt) {
-        if (evt.key === ESC_KEY) {
+      var onPopupEscPress = function (subEvt) {
+        if (subEvt.key === ESC_KEY) {
           closePopup();
         }
       };
