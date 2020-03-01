@@ -270,6 +270,8 @@ function activateForm() {
     formFieldsets[i].removeAttribute('disabled');
   }
   form.classList.remove('ad-form--disabled');
+  validationRoomNumberAndCapacity();
+  setMainPinCoordinates();
 }
 
 function activateMap() {
@@ -288,7 +290,6 @@ function activatePage(evt) {
     generateRandomAds();
     renderAdPins();
     activateForm();
-    setMainPinCoordinates();
     mainPin.removeEventListener('mousedown', activatePage);
     mainPin.removeEventListener('keydown', activatePage);
     mainPin.addEventListener('mousedown', function () {
@@ -321,6 +322,5 @@ form.addEventListener('change', function (evt) {
   }
 });
 
-validationRoomNumberAndCapacity();
 deactivateForm();
 setMainPinCoordinates();
