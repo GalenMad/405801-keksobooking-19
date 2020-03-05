@@ -1,15 +1,12 @@
 'use strict';
 
 (function () {
-
   var ESC_KEY = 'Escape';
   var PIN_WIDTH = 50;
   var PIN_HEIGHT = 70;
   var ads = window.ads;
-
   var map = document.querySelector('.map');
   var mapFilter = map.querySelector('.map__filters-container');
-
   var adList = document.querySelector('.map__pins');
   var adTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
   var adCardTemplate = document.querySelector('#card').content.querySelector('.map__card');
@@ -201,6 +198,5 @@
   window.insertAdPins = function () {
     adList.prepend(renderAdPins());
   };
-
 })();
 

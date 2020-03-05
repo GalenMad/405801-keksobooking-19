@@ -1,16 +1,12 @@
 'use strict';
 (function () {
-
   var AD_COUNT = 8;
-
   var COORDINATES_RANGE_X = [0, 1200];
   var COORDINATES_RANGE_Y = [130, 630];
-
   var timingOptions = ['12:00', '13:00', '14:00'];
   var hotelTypes = ['palace', 'flat', 'house', 'bungalo'];
   var featuresList = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
   var photosList = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
-
   window.ads = [];
 
   function getRandomInteger(min, max) {
