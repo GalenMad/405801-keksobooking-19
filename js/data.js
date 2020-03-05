@@ -1,4 +1,5 @@
 'use strict';
+
 (function () {
   var AD_COUNT = 8;
   var COORDINATES_RANGE_X = [0, 1200];

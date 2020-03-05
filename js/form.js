@@ -1,4 +1,5 @@
 'use strict';
+
 (function () {
   var COORDINATE_CORRECTION_X = 32.5;
   var COORDINATE_CORRECTION_Y = 75;
@@ -8,7 +9,6 @@
   var formFieldsets = form.querySelectorAll('fieldset');
 
   function activateValidation() {
-
     var addressInput = form.querySelector('#address');
     var roomNumberInput = form.querySelector('#room_number');
     var capacityInput = form.querySelector('#capacity');
