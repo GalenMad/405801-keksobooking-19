@@ -18,7 +18,6 @@
   mainPin.addEventListener('mousedown', function (evt) {
     if (evt.button === 0) {
       evt.preventDefault();
-      setMainPinCoordinates();
 
       var start = {
         x: evt.clientX,
