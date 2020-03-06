@@ -1,10 +1,6 @@
 'use strict';
 
 (function () {
-  var COORDINATE_CORRECTION_X = 32;
-  var COORDINATE_CORRECTION_Y = 82;
-  var map = document.querySelector('.map');
-  var mainPin = map.querySelector('.map__pin--main');
   var form = document.querySelector('.ad-form');
   var formFieldsets = form.querySelectorAll('fieldset');
 
@@ -165,12 +161,6 @@
     validationOfferTiming();
   }
 
-  function setMainPinCoordinates() {
-    var coordinateX = Math.round(Number(mainPin.style.left.slice(0, -2)) + COORDINATE_CORRECTION_X);
-    var coordinateY = Math.round(Number(mainPin.style.top.slice(0, -2)) + COORDINATE_CORRECTION_Y);
-    form.querySelector('#address').value = coordinateX + ', ' + coordinateY;
-  }
-
   function deactivateForm() {
     for (var i = formFieldsets.length - 1; i > 0; i--) {
       formFieldsets[i].setAttribute('disabled', 'disabled');
@@ -184,14 +174,7 @@
     }
     form.classList.remove('ad-form--disabled');
     activateValidation();
-    setMainPinCoordinates();
-    mainPin.addEventListener('mousedown', function (evt) {
-      if (evt.button === 0) {
-        setMainPinCoordinates();
-      }
-    });
   };
 
   deactivateForm();
-  setMainPinCoordinates();
 })();
