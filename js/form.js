@@ -1,8 +1,8 @@
 'use strict';
 
 (function () {
-  var COORDINATE_CORRECTION_X = 32.5;
-  var COORDINATE_CORRECTION_Y = 75;
+  var COORDINATE_CORRECTION_X = 32;
+  var COORDINATE_CORRECTION_Y = 82;
   var map = document.querySelector('.map');
   var mainPin = map.querySelector('.map__pin--main');
   var form = document.querySelector('.ad-form');
