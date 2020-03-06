@@ -4,40 +4,34 @@
   var PIN_WIDTH = 50;
   var PIN_HEIGHT = 70;
   var ads = window.ads;
-  var map = document.querySelector('.map');
-  var adList = document.querySelector('.map__pins');
-  var adTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
+  var adPinList = document.querySelector('.map__pins');
+  var adPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
+
+  function renderPin(counter) {
+    var offerPin = adPinTemplate.cloneNode(true);
+    var adElementImage = offerPin.querySelector('img');
+    var adCoordinateX = ads[counter].location.x - PIN_WIDTH / 2;
+    var adCoordinateY = ads[counter].location.y - PIN_HEIGHT;
+    offerPin.setAttribute('style', 'left:' + adCoordinateX + 'px; top:' + adCoordinateY + 'px;');
+    adElementImage.setAttribute('src', ads[counter].author.avatar);
+    adElementImage.setAttribute('alt', ads[counter].offer.title);
+
+    offerPin.addEventListener('click', function () {
+      window.insertAdCard(counter);
+    });
+    return offerPin;
+  }
 
   function renderAdPins() {
     var templateList = document.createDocumentFragment();
     for (var i = ads.length - 1; i >= 0; --i) {
-      var offerPin = adTemplate.cloneNode(true);
-      offerPin.setAttribute('data-offer-id', i);
-      var adElementImage = offerPin.querySelector('img');
-      var adCoordinateX = ads[i].location.x - PIN_WIDTH / 2;
-      var adCoordinateY = ads[i].location.y - PIN_HEIGHT;
-      offerPin.setAttribute('style', 'left:' + adCoordinateX + 'px; top:' + adCoordinateY + 'px;');
-      adElementImage.setAttribute('src', ads[i].author.avatar);
-      adElementImage.setAttribute('alt', ads[i].offer.title);
-
-      offerPin.addEventListener('click', function (evt) {
-        var openPopup = map.querySelector('.map__card');
-        var pinId = evt.currentTarget.getAttribute('data-offer-id');
-        if (openPopup && openPopup.getAttribute('data-offer-id') !== pinId) {
-          openPopup.remove();
-          window.insertAdCard(pinId);
-        } else if (!openPopup) {
-          window.insertAdCard(pinId);
-        }
-      });
-
-      templateList.append(offerPin);
+      templateList.append(renderPin(i));
     }
     return templateList;
   }
 
   window.insertAdPins = function () {
-    adList.prepend(renderAdPins());
+    adPinList.prepend(renderAdPins());
   };
 })();
 

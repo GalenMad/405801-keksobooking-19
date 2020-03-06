@@ -129,7 +129,6 @@
 
     offerFeatures.innerHTML = '';
     templatePhoto.remove();
-    offerCard.setAttribute('data-offer-id', offerId);
 
     checkData(ad.author.avatar, offerAvatar, setOfferAvatar);
     checkData(adOffer.title, offerTitle, setOfferTitle);
@@ -163,6 +162,10 @@
   }
 
   window.insertAdCard = function (offerId) {
+    var currentOpenCard = map.querySelector('.map__card.popup');
+    if (currentOpenCard) {
+      currentOpenCard.remove();
+    }
     map.insertBefore(renderAdCard(offerId), mapFilter);
   };
 })();
