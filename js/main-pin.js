@@ -44,7 +44,7 @@
             axisShift = shift.x;
             range = COORDINATES_RANGE_X;
             offset = mainPin.offsetLeft;
-          } else {
+          } else if (axis === 'y') {
             axisShift = shift.y;
             range = COORDINATES_RANGE_Y;
             offset = mainPin.offsetTop;
