@@ -9,7 +9,7 @@
     if (evt.button === 0 || evt.key === ENTER_KEY) {
       map.classList.remove('map--faded');
       window.activateForm();
-      window.insertAdPins();
+      window.backend.load();
       mainPin.removeEventListener('mousedown', activatePage);
       mainPin.removeEventListener('keydown', activatePage);
     }

@@ -2,7 +2,6 @@
 
 (function () {
   var ESC_KEY = 'Escape';
-  var ads = window.ads;
   var map = document.querySelector('.map');
   var mapFilter = map.querySelector('.map__filters-container');
   var adCardTemplate = document.querySelector('#card').content.querySelector('.map__card');
@@ -12,7 +11,7 @@
     return titles[(number % 100 > 4 && number % 100 < 20) ? 2 : cases[(number % 10 < 5) ? number % 10 : 5]];
   }
 
-  function renderAdCard(offerId) {
+  function renderAdCard(ads, offerId) {
 
     function checkData(key, element, callback) {
       if (key) {
@@ -161,12 +160,12 @@
     return offerCard;
   }
 
-  window.insertAdCard = function (offerId) {
+  window.insertAdCard = function (ads, offerId) {
     var currentOpenCard = map.querySelector('.map__card.popup');
     if (currentOpenCard) {
       currentOpenCard.remove();
     }
-    map.insertBefore(renderAdCard(offerId), mapFilter);
+    map.insertBefore(renderAdCard(ads, offerId), mapFilter);
   };
 })();
 
