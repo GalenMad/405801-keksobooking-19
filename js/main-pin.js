@@ -8,6 +8,7 @@
   var mainPin = map.querySelector('.map__pin--main');
   var form = document.querySelector('.ad-form');
   var addressInput = form.querySelector('#address');
+  mainPin.setAttribute('tabindex', '1');
 
   function setMainPinCoordinates() {
     var coordinateX = Math.round(Number(mainPin.style.left.slice(0, -2)) + COORDINATE_CORRECTION_X);

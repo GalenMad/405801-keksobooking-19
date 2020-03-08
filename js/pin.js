@@ -3,11 +3,10 @@
 (function () {
   var PIN_WIDTH = 50;
   var PIN_HEIGHT = 70;
-  var ads = window.ads;
   var adPinList = document.querySelector('.map__pins');
   var adPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 
-  function renderPin(counter) {
+  function renderPin(ads, counter) {
     var offerPin = adPinTemplate.cloneNode(true);
     var adElementImage = offerPin.querySelector('img');
     var adCoordinateX = ads[counter].location.x - PIN_WIDTH / 2;
@@ -17,21 +16,23 @@
     adElementImage.setAttribute('alt', ads[counter].offer.title);
 
     offerPin.addEventListener('click', function () {
-      window.insertAdCard(counter);
+      window.insertAdCard(ads, counter);
     });
     return offerPin;
   }
 
-  function renderAdPins() {
+  function renderAdPins(ads) {
     var templateList = document.createDocumentFragment();
     for (var i = ads.length - 1; i >= 0; --i) {
-      templateList.append(renderPin(i));
+      if (ads[i].offer) {
+        templateList.append(renderPin(ads, i));
+      }
     }
     return templateList;
   }
 
-  window.insertAdPins = function () {
-    adPinList.prepend(renderAdPins());
+  window.insertAdPins = function (ads) {
+    adPinList.prepend(renderAdPins(ads));
   };
 })();
 
