@@ -16,7 +16,8 @@
     adElementImage.setAttribute('alt', ads[counter].offer.title);
 
     offerPin.addEventListener('click', function () {
-      window.insertAdCard(ads, counter);
+      window.card.insertAdCard(ads, counter);
+      offerPin.classList.add('map__pin--active');
     });
     return offerPin;
   }
