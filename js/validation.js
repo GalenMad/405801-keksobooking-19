@@ -8,8 +8,8 @@
   var titleInput = form.querySelector('#title');
   var typeInput = form.querySelector('#type');
   var priceInput = form.querySelector('#price');
-  var timeinInput = form.querySelector('#timein');
-  var timeoutInput = form.querySelector('#timeout');
+  var timeInInput = form.querySelector('#timein');
+  var timeOutInput = form.querySelector('#timeout');
   var avatarInput = form.querySelector('#avatar');
   var imagesInput = form.querySelector('#images');
 
@@ -141,11 +141,11 @@
   }
 
   function validationOfferTiming() {
-    timeoutInput.addEventListener('input', function () {
-      timeinInput.value = timeoutInput.value;
+    timeOutInput.addEventListener('input', function () {
+      timeInInput.value = timeOutInput.value;
     });
-    timeinInput.addEventListener('input', function () {
-      timeoutInput.value = timeinInput.value;
+    timeInInput.addEventListener('input', function () {
+      timeOutInput.value = timeInInput.value;
     });
   }
 
