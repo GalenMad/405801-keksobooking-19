@@ -10,11 +10,19 @@
   var addressInput = form.querySelector('#address');
   mainPin.setAttribute('tabindex', '1');
 
-  function setMainPinCoordinates() {
+  function setCoordinates() {
     var coordinateX = Math.round(Number(mainPin.style.left.slice(0, -2)) + COORDINATE_CORRECTION_X);
     var coordinateY = Math.round(Number(mainPin.style.top.slice(0, -2)) + COORDINATE_CORRECTION_Y);
     addressInput.value = coordinateX + ', ' + coordinateY;
   }
+
+  window.mainPin = {
+    resetCoordinates: function () {
+      mainPin.style.left = '570px';
+      mainPin.style.top = '375px';
+      setCoordinates();
+    }
+  };
 
   mainPin.addEventListener('mousedown', function (evt) {
     if (evt.button === 0) {
@@ -65,7 +73,7 @@
 
       var onMouseUp = function (upEvt) {
         upEvt.preventDefault();
-        setMainPinCoordinates();
+        setCoordinates();
         document.removeEventListener('mousemove', onMouseMove);
         document.removeEventListener('mouseup', onMouseUp);
       };
@@ -75,6 +83,5 @@
       document.addEventListener('mouseup', onMouseUp);
     }
   });
-
-  setMainPinCoordinates();
+  setCoordinates();
 })();

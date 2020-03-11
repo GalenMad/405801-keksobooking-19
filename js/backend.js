@@ -1,54 +1,48 @@
 'use strict';
 
 (function () {
-  var URL = 'https://js.dump.academy/keksobooking/data';
-  var errorElementTemplate = document.querySelector('#error').content.querySelector('.error');
 
-  function onSuccess(response) {
-    window.insertAdPins(response);
+  function throwError(message) {
+    throw new Error(message);
   }
 
-  function onError(message) {
-    var errorElement = errorElementTemplate.cloneNode(true);
-    var errorMessage = errorElement.querySelector('.error__message');
-    var errorButton = errorElement.querySelector('.error__button');
-    errorMessage.textContent = message;
-    errorButton.setAttribute('tabindex', '2');
+  function sendXHR(method, url, onError, onSuccess, data) {
+    var xhr = new XMLHttpRequest();
+    xhr.timeout = 10000;
+    xhr.responseType = 'json';
 
-    function onErrorButtonClick() {
-      errorElement.remove();
-      errorButton.removeEventListener('click', onErrorButtonClick);
-      window.backend.load();
-    }
+    xhr.addEventListener('load', function () {
+      if (xhr.status === 200) {
+        onSuccess(xhr.response);
+      } else {
+        onError('Произошла ошибка: ' + xhr.status + ' ' + xhr.statusText);
+      }
+    });
 
-    errorButton.addEventListener('click', onErrorButtonClick);
-    document.body.append(errorElement);
+    xhr.addEventListener('error', function () {
+      onError('Произошла ошибка соединения');
+    });
+
+    xhr.addEventListener('timeout', function () {
+      onError('Запрос не успел выполниться за ' + (xhr.timeout / 1000) + 'с');
+    });
+
+    xhr.open(method, url);
+    xhr.send(data);
   }
 
   window.backend = {
-    load: function () {
-      var xhr = new XMLHttpRequest();
-      xhr.timeout = 10000;
-      xhr.responseType = 'json';
 
-      xhr.addEventListener('load', function () {
-        if (xhr.status === 200) {
-          onSuccess(xhr.response);
-        } else {
-          onError('Произошла ошибка: ' + xhr.status + ' ' + xhr.statusText);
-        }
-      });
+    load: function (onSuccess) {
+      var URL = 'https://js.dump.academy/keksobooking/data';
+      sendXHR('GET', URL, throwError, onSuccess);
+    },
 
-      xhr.addEventListener('error', function () {
-        onError('Произошла ошибка соединения');
-      });
-
-      xhr.addEventListener('timeout', function () {
-        onError('Запрос не успел выполниться за ' + (xhr.timeout / 1000) + 'с');
-      });
-
-      xhr.open('GET', URL);
-      xhr.send();
+    upload: function (data, onError, onSuccess) {
+      var URL = 'https://js.dump.academy/keksobooking';
+      sendXHR('POST', URL, onError, onSuccess, data);
     }
+
   };
+
 })();

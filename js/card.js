@@ -1,17 +1,47 @@
 'use strict';
 
 (function () {
-  var ESC_KEY = 'Escape';
   var map = document.querySelector('.map');
   var mapFilter = map.querySelector('.map__filters-container');
   var adCardTemplate = document.querySelector('#card').content.querySelector('.map__card');
+  var adPinList = document.querySelector('.map__pins');
 
   function declOfNum(number, titles) {
     var cases = [2, 0, 1, 1, 1, 2];
     return titles[(number % 100 > 4 && number % 100 < 20) ? 2 : cases[(number % 10 < 5) ? number % 10 : 5]];
   }
 
+  function closeCurrentPopup() {
+    var currentOpenCard = map.querySelector('.map__card.popup');
+    if (currentOpenCard) {
+      currentOpenCard.remove();
+    }
+  }
+
+  function deselectPin() {
+    var selectedPin = adPinList.querySelector('.map__pin--active');
+    if (selectedPin) {
+      selectedPin.classList.remove('map__pin--active');
+    }
+  }
+
   function renderAdCard(ads, offerId) {
+
+    var ad = ads[offerId];
+    var adOffer = ad.offer;
+    var card = adCardTemplate.cloneNode(true);
+    var avatar = card.querySelector('.popup__avatar');
+    var title = card.querySelector('.popup__title');
+    var address = card.querySelector('.popup__text--address');
+    var price = card.querySelector('.popup__text--price');
+    var type = card.querySelector('.popup__type');
+    var capacity = card.querySelector('.popup__text--capacity');
+    var timing = card.querySelector('.popup__text--time');
+    var features = card.querySelector('.popup__features');
+    var description = card.querySelector('.popup__description');
+    var photos = card.querySelector('.popup__photos');
+    var defaultPhoto = photos.querySelector('.popup__photo');
+    var currentCardClose = card.querySelector('.popup__close');
 
     function checkData(key, element, callback) {
       if (key) {
@@ -37,13 +67,13 @@
 
     function createPhotos() {
       if (adOffer.photos.length) {
-        var photos = document.createDocumentFragment();
+        var cardPhotos = document.createDocumentFragment();
         for (var k = adOffer.photos.length - 1; k >= 0; k--) {
-          var photo = templatePhoto.cloneNode(false);
+          var photo = defaultPhoto.cloneNode(false);
           photo.src = adOffer.photos[k];
-          photos.prepend(photo);
+          cardPhotos.prepend(photo);
         }
-        return photos;
+        return cardPhotos;
       } else {
         return null;
       }
@@ -51,13 +81,13 @@
 
     function createFeatures() {
       if (adOffer.features.length) {
-        var features = document.createDocumentFragment();
+        var cardFeatures = document.createDocumentFragment();
         for (var t = adOffer.features.length - 1; t >= 0; t--) {
           var feature = document.createElement('li');
           feature.className = 'popup__feature popup__feature--' + adOffer.features[t];
-          features.prepend(feature);
+          cardFeatures.prepend(feature);
         }
-        return features;
+        return cardFeatures;
       } else {
         return null;
       }
@@ -111,61 +141,30 @@
       element.append(key);
     }
 
-    var ad = ads[offerId];
-    var adOffer = ad.offer;
-    var offerCard = adCardTemplate.cloneNode(true);
-    var offerAvatar = offerCard.querySelector('.popup__avatar');
-    var offerTitle = offerCard.querySelector('.popup__title');
-    var offerAddress = offerCard.querySelector('.popup__text--address');
-    var offerPrice = offerCard.querySelector('.popup__text--price');
-    var offerType = offerCard.querySelector('.popup__type');
-    var offerCapacity = offerCard.querySelector('.popup__text--capacity');
-    var offerTiming = offerCard.querySelector('.popup__text--time');
-    var offerFeatures = offerCard.querySelector('.popup__features');
-    var offerDescription = offerCard.querySelector('.popup__description');
-    var offerPhotos = offerCard.querySelector('.popup__photos');
-    var templatePhoto = offerPhotos.querySelector('.popup__photo');
-
-    offerFeatures.innerHTML = '';
-    templatePhoto.remove();
-
-    checkData(ad.author.avatar, offerAvatar, setOfferAvatar);
-    checkData(adOffer.title, offerTitle, setOfferTitle);
-    checkData(adOffer.address, offerAddress, setOfferAddress);
-    checkData(adOffer.price, offerPrice, setOfferPrice);
-    checkData(getOfferType(), offerType, setOfferType);
-    checkData(adOffer.rooms, offerCapacity, setOfferRooms);
-    checkData(adOffer.guests, offerCapacity, setOfferCapacity);
-    checkData(adOffer.checkin, offerTiming, setOfferCheckIn);
-    checkData(adOffer.checkout, offerTiming, setOfferCheckOut);
-    checkData(adOffer.description, offerDescription, setOfferDescription);
-    checkData(createFeatures(), offerFeatures, setOfferFeatures);
-    checkData(createPhotos(), offerPhotos, setOfferPhotos);
-
-    var currentCardClose = offerCard.querySelector('.popup__close');
-
-    var closePopup = function () {
-      offerCard.remove();
-      document.removeEventListener('keydown', onPopupEscPress);
-    };
-
-    var onPopupEscPress = function (evt) {
-      if (evt.key === ESC_KEY) {
-        closePopup();
-      }
-    };
-
-    currentCardClose.addEventListener('click', closePopup);
-    document.addEventListener('keydown', onPopupEscPress);
-    return offerCard;
+    features.innerHTML = '';
+    defaultPhoto.remove();
+    checkData(ad.author.avatar, avatar, setOfferAvatar);
+    checkData(adOffer.title, title, setOfferTitle);
+    checkData(adOffer.address, address, setOfferAddress);
+    checkData(adOffer.price, price, setOfferPrice);
+    checkData(getOfferType(), type, setOfferType);
+    checkData(adOffer.rooms, capacity, setOfferRooms);
+    checkData(adOffer.guests, capacity, setOfferCapacity);
+    checkData(adOffer.checkin, timing, setOfferCheckIn);
+    checkData(adOffer.checkout, timing, setOfferCheckOut);
+    checkData(adOffer.description, description, setOfferDescription);
+    checkData(createFeatures(), features, setOfferFeatures);
+    checkData(createPhotos(), photos, setOfferPhotos);
+    window.handlerPopup(currentCardClose, true, deselectPin);
+    return card;
   }
 
-  window.insertAdCard = function (ads, offerId) {
-    var currentOpenCard = map.querySelector('.map__card.popup');
-    if (currentOpenCard) {
-      currentOpenCard.remove();
+  window.card = {
+    insertAdCard: function (ads, offerId) {
+      deselectPin();
+      closeCurrentPopup();
+      map.insertBefore(renderAdCard(ads, offerId), mapFilter);
     }
-    map.insertBefore(renderAdCard(ads, offerId), mapFilter);
   };
 })();
 
