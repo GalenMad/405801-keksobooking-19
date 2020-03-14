@@ -11,9 +11,13 @@
   var mainContent = document.querySelector('main');
   var map = document.querySelector('.map');
   var mainPin = map.querySelector('.map__pin--main');
+  var filterForm = document.querySelector('.map__filters');
+  var filterFormFieldsets = filterForm.querySelectorAll('.map__filters > *');
 
   function onSuccessLoad(response) {
-    window.insertAdPins(response);
+    window.ads = response;
+    window.pin.insert(window.filter.base());
+    activateMapFilterForm();
   }
 
   function onErrorSend(message) {
@@ -37,39 +41,34 @@
     window.backend.upload(new FormData(form), onErrorSend, onSuccessSend);
   }
 
-  function removePins() {
-    var pins = document.querySelectorAll('.map__pin');
-    for (var i = pins.length - 1; i >= 0; i--) {
-      var pin = pins[i];
-      if (!(pin.classList.contains('map__pin--main'))) {
-        pin.remove();
-      }
-    }
-    var currentOpenCard = map.querySelector('.map__card.popup');
-    if (currentOpenCard) {
-      currentOpenCard.remove();
-    }
-  }
-
   function onFormResetClick(evt) {
     evt.preventDefault();
     deactivatePage();
   }
 
-  function changeFieldsetAble(able) {
-    for (var i = formFieldsets.length - 1; i >= 0; i--) {
-      formFieldsets[i][able + 'Attribute']('disabled', 'disabled');
-    }
+  function deactivateMapFilterForm() {
+    filterForm.reset();
+    changeFieldsetsAble(filterFormFieldsets, 'set');
+  }
+
+  function activateMapFilterForm() {
+    changeFieldsetsAble(filterFormFieldsets, 'remove');
+  }
+
+  function changeFieldsetsAble(target, able) {
+    target.forEach(function (item) {
+      item[able + 'Attribute']('disabled', 'disabled');
+    });
   }
 
   function deactivateForm() {
-    changeFieldsetAble('set');
+    changeFieldsetsAble(formFieldsets, 'set');
     form.classList.add('ad-form--disabled');
     form.reset();
   }
 
   function activateForm() {
-    changeFieldsetAble('remove');
+    changeFieldsetsAble(formFieldsets, 'remove');
     form.classList.remove('ad-form--disabled');
   }
 
@@ -85,7 +84,8 @@
 
   function deactivatePage() {
     deactivateForm();
-    removePins();
+    deactivateMapFilterForm();
+    window.pin.remove();
     window.mainPin.resetCoordinates();
     map.classList.add('map--faded');
     mainPin.addEventListener('mousedown', activatePage);
@@ -97,4 +97,5 @@
   mainPin.addEventListener('mousedown', activatePage);
   mainPin.addEventListener('keydown', activatePage);
   deactivateForm();
+  deactivateMapFilterForm();
 })();

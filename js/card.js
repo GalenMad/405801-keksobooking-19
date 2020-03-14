@@ -28,7 +28,6 @@
   function renderAdCard(ads, offerId) {
 
     var ad = ads[offerId];
-    var adOffer = ad.offer;
     var card = adCardTemplate.cloneNode(true);
     var avatar = card.querySelector('.popup__avatar');
     var title = card.querySelector('.popup__title');
@@ -43,34 +42,106 @@
     var defaultPhoto = photos.querySelector('.popup__photo');
     var currentCardClose = card.querySelector('.popup__close');
 
-    function checkData(key, element, callback) {
-      if (key) {
-        callback(element, key);
-      } else {
-        element.remove();
-      }
-    }
+    var offerTypeMap = {
+      'bungalo': 'Бунгало',
+      'house': 'Дом',
+      'flat': 'Квартира',
+      'palace': 'Дворец'
+    };
 
-    function getOfferType() {
-      if (adOffer.type === 'bungalo') {
-        return 'Бунгало';
-      } else if (adOffer.type === 'house') {
-        return 'Дом';
-      } else if (adOffer.type === 'flat') {
-        return 'Квартира';
-      } else if (adOffer.type === 'palace') {
-        return 'Дворец';
-      } else {
-        return null;
-      }
-    }
+    var checkList = [
+      {
+        key: ad.author.avatar,
+        element: avatar,
+        callback: function (element, key) {
+          element.src = key;
+        }
+      },
+      {
+        key: ad.offer.title,
+        element: title,
+        callback: function (element, key) {
+          element.textContent = key;
+        }
+      },
+      {
+        key: offerTypeMap[ad.offer.type],
+        element: type,
+        callback: function (element, key) {
+          element.textContent = key;
+        }
+      },
+      {
+        key: ad.offer.address,
+        element: address,
+        callback: function (element, key) {
+          element.textContent = key;
+        }
+      },
+      {
+        key: ad.offer.description,
+        element: description,
+        callback: function (element, key) {
+          element.textContent = key;
+        }
+      },
+      {
+        key: ad.offer.price,
+        element: price,
+        callback: function (element, key) {
+          element.textContent = key + ' ₽/ночь';
+        }
+      },
+      {
+        key: ad.offer.rooms,
+        element: capacity,
+        callback: function (element, key) {
+          element.textContent = key + ' ' + declOfNum(key, ['комната', 'комнаты', 'комнат']);
+        }
+      },
+      {
+        key: ad.offer.guests,
+        element: capacity,
+        callback: function (element, key) {
+          element.textContent += ' для ' + key + ' ' + declOfNum(key, ['гостя', 'гостей', 'гостей']);
+        }
+      },
+      {
+        key: ad.offer.checkin,
+        element: timing,
+        callback: function (element, key) {
+          element.textContent = 'Заезд после ' + key;
+        }
+      },
+      {
+        key: ad.offer.checkout,
+        element: timing,
+        callback: function (element, key) {
+          element.textContent += ', выезд до ' + key;
+        }
+      },
+      {
+        key: createFeatures(),
+        element: features,
+        callback: function (element, key) {
+          element.append(key);
+        }
+      },
+      {
+        key: createPhotos(),
+        element: photos,
+        callback: function (element, key) {
+          element.append(key);
+        }
+      },
+    ];
 
     function createPhotos() {
-      if (adOffer.photos.length) {
+      if (ad.offer.photos.length) {
         var cardPhotos = document.createDocumentFragment();
-        for (var k = adOffer.photos.length - 1; k >= 0; k--) {
+        for (var k = ad.offer.photos.length - 1; k >= 0; k--) {
           var photo = defaultPhoto.cloneNode(false);
-          photo.src = adOffer.photos[k];
+          photo.src = ad.offer.photos[k];
           cardPhotos.prepend(photo);
         }
         return cardPhotos;
@@ -80,81 +151,34 @@
     }
 
     function createFeatures() {
-      if (adOffer.features.length) {
+      if (ad.offer.features.length) {
         var cardFeatures = document.createDocumentFragment();
-        for (var t = adOffer.features.length - 1; t >= 0; t--) {
+        ad.offer.features.forEach(function (item) {
           var feature = document.createElement('li');
-          feature.className = 'popup__feature popup__feature--' + adOffer.features[t];
+          feature.className = 'popup__feature popup__feature--' + item;
           cardFeatures.prepend(feature);
-        }
+        });
         return cardFeatures;
       } else {
         return null;
       }
     }
 
-    function setOfferAvatar(element, key) {
-      element.src = key;
-    }
-
-    function setOfferTitle(element, key) {
-      element.textContent = key;
-    }
-
-    function setOfferAddress(element, key) {
-      element.textContent = key;
-    }
-
-    function setOfferPrice(element, key) {
-      element.textContent = key + '₽/ночь';
-    }
-
-    function setOfferType(element, key) {
-      element.textContent = key;
-    }
-
-    function setOfferRooms(element, key) {
-      element.textContent = key + ' ' + declOfNum(key, ['комната', 'комнаты', 'комнат']);
-    }
-
-    function setOfferCapacity(element, key) {
-      element.textContent += ' для ' + key + ' ' + declOfNum(key, ['гостя', 'гостей', 'гостей']);
-    }
-
-    function setOfferCheckIn(element, key) {
-      element.textContent = 'Заезд после ' + key;
-    }
-
-    function setOfferCheckOut(element, key) {
-      element.textContent += ', выезд до ' + key;
-    }
-
-    function setOfferDescription(element, key) {
-      element.textContent = key;
-    }
-
-    function setOfferFeatures(element, key) {
-      element.append(key);
-    }
-
-    function setOfferPhotos(element, key) {
-      element.append(key);
+    function checkData(key, element, callback) {
+      if (key) {
+        callback(element, key);
+      } else {
+        element.remove();
+      }
     }
 
     features.innerHTML = '';
     defaultPhoto.remove();
-    checkData(ad.author.avatar, avatar, setOfferAvatar);
-    checkData(adOffer.title, title, setOfferTitle);
-    checkData(adOffer.address, address, setOfferAddress);
-    checkData(adOffer.price, price, setOfferPrice);
-    checkData(getOfferType(), type, setOfferType);
-    checkData(adOffer.rooms, capacity, setOfferRooms);
-    checkData(adOffer.guests, capacity, setOfferCapacity);
-    checkData(adOffer.checkin, timing, setOfferCheckIn);
-    checkData(adOffer.checkout, timing, setOfferCheckOut);
-    checkData(adOffer.description, description, setOfferDescription);
-    checkData(createFeatures(), features, setOfferFeatures);
-    checkData(createPhotos(), photos, setOfferPhotos);
+
+    checkList.forEach(function (item) {
+      checkData(item.key, item.element, item.callback);
+    });
+
     window.handlerPopup(currentCardClose, true, deselectPin);
     return card;
   }
