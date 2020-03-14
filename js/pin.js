@@ -32,8 +32,31 @@
     return templateList;
   }
 
-  window.insertAdPins = function (ads) {
-    adPinList.prepend(renderAdPins(ads));
+  function removePins() {
+    var pins = document.querySelectorAll('.map__pin');
+    pins.forEach(function (pin) {
+      if (!(pin.classList.contains('map__pin--main'))) {
+        pin.remove();
+      }
+    });
+  }
+
+  function removeOpenPopup() {
+    var currentOpenCard = document.querySelector('.map__card.popup');
+    if (currentOpenCard) {
+      currentOpenCard.remove();
+    }
+  }
+
+  window.pin = {
+    insert: function (ads) {
+      this.remove();
+      adPinList.prepend(renderAdPins(ads));
+    },
+    remove: function () {
+      removePins();
+      removeOpenPopup();
+    }
   };
 })();
 

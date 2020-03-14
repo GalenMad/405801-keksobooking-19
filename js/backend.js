@@ -14,7 +14,6 @@
     xhr.addEventListener('load', function () {
       if (xhr.status === 200) {
         onSuccess(xhr.response);
-        console.log(xhr.response);
       } else {
         onError('Произошла ошибка: ' + xhr.status + ' ' + xhr.statusText);
       }
