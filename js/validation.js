@@ -13,7 +13,7 @@
   var avatarInput = form.querySelector('#avatar');
   var imagesInput = form.querySelector('#images');
 
-  var validObj = {
+  var validationList = {
     title: {
       minLength: 30,
       maxLength: 100,
@@ -60,9 +60,8 @@
     }
   };
 
-  function validationOfferTitle(p) {
-
-    titleInput.setAttribute('required', 'required');
+  (function () {
+    var p = validationList.title;
 
     function validation() {
       if (titleInput.validity.valueMissing) {
@@ -78,9 +77,10 @@
 
     validation();
     titleInput.addEventListener('input', validation);
-  }
+  })();
 
-  function validationOfferType(p) {
+  (function () {
+    var p = validationList.price;
 
     function validation() {
       priceInput.placeholder = p[typeInput.value].min;
@@ -88,9 +88,10 @@
 
     validation();
     typeInput.addEventListener('input', validation);
-  }
+  })();
 
-  function validationOfferCapacity(p) {
+  (function () {
+    var p = validationList.capacity;
 
     function validation() {
       if (Number(roomNumberInput.value) === 100 && Number(capacityInput.value) !== 0) {
@@ -107,11 +108,10 @@
     validation();
     roomNumberInput.addEventListener('input', validation);
     capacityInput.addEventListener('input', validation);
-  }
+  })();
 
-  function validationOfferPrice(p) {
-
-    priceInput.setAttribute('required', 'required');
+  (function () {
+    var p = validationList.price;
     priceInput.setAttribute('max', p.max);
 
     function validation() {
@@ -129,31 +129,23 @@
     validation();
     priceInput.addEventListener('input', validation);
     typeInput.addEventListener('input', validation);
-  }
+  })();
 
-  function validationImageInputs(p) {
+  (function () {
+    var p = validationList.upload;
     avatarInput.setAttribute(p.attribute, p.value);
     imagesInput.setAttribute(p.attribute, p.value);
-  }
+  })();
 
-  function validationOfferAddress() {
-    addressInput.setAttribute('readonly', 'readonly');
-  }
+  addressInput.setAttribute('readonly', 'readonly');
+  titleInput.setAttribute('required', 'required');
+  priceInput.setAttribute('required', 'required');
 
-  function validationOfferTiming() {
-    timeOutInput.addEventListener('input', function () {
-      timeInInput.value = timeOutInput.value;
-    });
-    timeInInput.addEventListener('input', function () {
-      timeOutInput.value = timeInInput.value;
-    });
-  }
+  timeOutInput.addEventListener('input', function () {
+    timeInInput.value = timeOutInput.value;
+  });
 
-  validationOfferTitle(validObj.title);
-  validationOfferType(validObj.price);
-  validationOfferCapacity(validObj.capacity);
-  validationOfferPrice(validObj.price);
-  validationImageInputs(validObj.upload);
-  validationOfferAddress();
-  validationOfferTiming();
+  timeInInput.addEventListener('input', function () {
+    timeOutInput.value = timeInInput.value;
+  });
 })();

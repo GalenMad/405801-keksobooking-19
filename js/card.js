@@ -60,30 +60,22 @@
       {
         key: ad.offer.title,
         element: title,
-        callback: function (element, key) {
-          element.textContent = key;
-        }
+        callback: setTextContent
       },
       {
         key: offerTypeMap[ad.offer.type],
         element: type,
-        callback: function (element, key) {
-          element.textContent = key;
-        }
+        callback: setTextContent
       },
       {
         key: ad.offer.address,
         element: address,
-        callback: function (element, key) {
-          element.textContent = key;
-        }
+        callback: setTextContent
       },
       {
         key: ad.offer.description,
         element: description,
-        callback: function (element, key) {
-          element.textContent = key;
-        }
+        callback: setTextContent
       },
       {
         key: ad.offer.price,
@@ -123,18 +115,22 @@
       {
         key: createFeatures(),
         element: features,
-        callback: function (element, key) {
-          element.append(key);
-        }
+        callback: appendElement
       },
       {
         key: createPhotos(),
         element: photos,
-        callback: function (element, key) {
-          element.append(key);
-        }
+        callback: appendElement
       },
     ];
+
+    function setTextContent(element, key) {
+      element.textContent = key;
+    }
+
+    function appendElement(element, key) {
+      element.append(key);
+    }
 
     function createPhotos() {
       if (ad.offer.photos.length) {
