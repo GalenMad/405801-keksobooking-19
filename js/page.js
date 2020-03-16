@@ -16,7 +16,7 @@
 
   function onSuccessLoad(response) {
     window.ads = response;
-    window.pin.insert(window.filter.base());
+    window.pin.insert(window.filter.trimByMax(response));
     activateMapFilterForm();
   }
 
