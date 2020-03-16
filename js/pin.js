@@ -24,11 +24,11 @@
 
   function renderAdPins(ads) {
     var templateList = document.createDocumentFragment();
-    for (var i = ads.length - 1; i >= 0; --i) {
-      if (ads[i].offer) {
-        templateList.append(renderPin(ads, i));
+    ads.forEach(function (item, index, array) {
+      if (item && item.offer) {
+        templateList.append(renderPin(array, index));
       }
-    }
+    });
     return templateList;
   }
 
