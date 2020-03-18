@@ -5,11 +5,14 @@
   var LEFT_MOUSE_BUTTON_CODE = 0;
   var DEFAULT_BUTTON_TITLE = 'Опубликовать';
   var PROCESSED_BUTTON_TITLE = 'Отправляем…';
+  var DEFAULT_AVATAR_SRC = 'img/muffin-grey.svg';
   var form = document.querySelector('.ad-form');
   var formReset = form.querySelector('.ad-form__reset');
   var formSubmit = form.querySelector('.ad-form__submit');
   var formFieldsets = form.querySelectorAll('fieldset');
   var formFeaturesFieldset = form.querySelector('.ad-form__element.features').querySelectorAll('input');
+  var previewAvatar = form.querySelector('.ad-form-header__preview img');
+  var previewImages = form.querySelector('.ad-form__photo');
   var errorTemplate = document.querySelector('#error').content.querySelector('.error');
   var successTemplate = document.querySelector('#success').content.querySelector('.success');
   var mainContent = document.querySelector('main');
@@ -63,6 +66,11 @@
     deactivatePage();
   }
 
+  function clearInputPreviews() {
+    previewAvatar.src = DEFAULT_AVATAR_SRC;
+    previewImages.innerHTML = '';
+  }
+
   function deactivateMapFilterForm() {
     filterForm.reset();
     changeFieldsetsAble(filterFormFieldsets, 'set');
@@ -80,6 +88,7 @@
 
   function deactivateForm() {
     changeFieldsetsAble(formFieldsets, 'set');
+    clearInputPreviews();
     form.classList.add('ad-form--disabled');
     form.reset();
   }
