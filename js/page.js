@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-
   var ENTER_KEY = 'Enter';
   var form = document.querySelector('.ad-form');
   var formReset = document.querySelector('.ad-form__reset');

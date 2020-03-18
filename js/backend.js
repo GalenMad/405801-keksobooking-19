@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-
   function throwError(message) {
     throw new Error(message);
   }
