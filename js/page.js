@@ -1,22 +1,37 @@
 'use strict';
 
 (function () {
-
   var ENTER_KEY = 'Enter';
+  var LEFT_MOUSE_BUTTON_CODE = 0;
+  var DEFAULT_BUTTON_TITLE = 'Опубликовать';
+  var PROCESSED_BUTTON_TITLE = 'Отправляем…';
   var form = document.querySelector('.ad-form');
-  var formReset = document.querySelector('.ad-form__reset');
+  var formReset = form.querySelector('.ad-form__reset');
+  var formSubmit = form.querySelector('.ad-form__submit');
   var formFieldsets = form.querySelectorAll('fieldset');
+  var formFeaturesFieldset = form.querySelector('.ad-form__element.features').querySelectorAll('input');
   var errorTemplate = document.querySelector('#error').content.querySelector('.error');
   var successTemplate = document.querySelector('#success').content.querySelector('.success');
   var mainContent = document.querySelector('main');
-  var map = document.querySelector('.map');
+  var map = mainContent.querySelector('.map');
   var mainPin = map.querySelector('.map__pin--main');
-  var filterForm = document.querySelector('.map__filters');
+  var filterForm = map.querySelector('.map__filters');
   var filterFormFieldsets = filterForm.querySelectorAll('.map__filters > *');
+
+  function enableSubmitButton() {
+    formSubmit.removeAttribute('disabled');
+    formSubmit.textContent = DEFAULT_BUTTON_TITLE;
+  }
+
+  function disableSubmitButton() {
+    formSubmit.setAttribute('disabled', 'disabled');
+    formSubmit.textContent = PROCESSED_BUTTON_TITLE;
+  }
 
   function onSuccessLoad(response) {
     window.ads = response;
-    window.pin.insert(window.filter.trimByMax(response));
+    var ads = window.filter.trim(response);
+    window.pin.insert(ads);
     activateMapFilterForm();
   }
 
@@ -24,20 +39,22 @@
     var errorElement = errorTemplate.cloneNode(true);
     var errorMessage = errorElement.querySelector('.error__message');
     errorMessage.textContent = message;
-
-    window.handlerPopup(errorElement);
+    enableSubmitButton();
+    window.handler.popup(errorElement);
     mainContent.append(errorElement);
   }
 
   function onSuccessSend() {
     var successElement = successTemplate.cloneNode(true);
-    window.handlerPopup(successElement);
+    window.handler.popup(successElement);
     mainContent.append(successElement);
+    enableSubmitButton();
     deactivatePage();
   }
 
   function onFormSubmit(evt) {
     evt.preventDefault();
+    disableSubmitButton();
     window.backend.upload(new FormData(form), onErrorSend, onSuccessSend);
   }
 
@@ -72,13 +89,23 @@
     form.classList.remove('ad-form--disabled');
   }
 
-  function activatePage(evt) {
-    if (evt.button === 0 || evt.key === ENTER_KEY) {
-      activateForm();
-      window.backend.load(onSuccessLoad);
-      map.classList.remove('map--faded');
-      mainPin.removeEventListener('mousedown', activatePage);
-      mainPin.removeEventListener('keydown', activatePage);
+  function activatePage() {
+    activateForm();
+    window.backend.load(onSuccessLoad);
+    map.classList.remove('map--faded');
+    mainPin.removeEventListener('mousedown', onMainPinMousedown);
+    mainPin.removeEventListener('keypress', onMainPinKeydown);
+  }
+
+  function onMainPinKeydown(evt) {
+    if (evt.key === ENTER_KEY) {
+      activatePage();
+    }
+  }
+
+  function onMainPinMousedown(evt) {
+    if (evt.button === LEFT_MOUSE_BUTTON_CODE) {
+      activatePage();
     }
   }
 
@@ -88,14 +115,15 @@
     window.pin.remove();
     window.mainPin.resetCoordinates();
     map.classList.add('map--faded');
-    mainPin.addEventListener('mousedown', activatePage);
-    mainPin.addEventListener('keydown', activatePage);
+    mainPin.addEventListener('mousedown', onMainPinMousedown);
+    mainPin.addEventListener('keypress', onMainPinKeydown);
   }
 
   form.addEventListener('submit', onFormSubmit);
   formReset.addEventListener('click', onFormResetClick);
-  mainPin.addEventListener('mousedown', activatePage);
-  mainPin.addEventListener('keydown', activatePage);
+  window.handler.checkboxesFieldset(formFeaturesFieldset);
+  mainPin.addEventListener('mousedown', onMainPinMousedown);
+  mainPin.addEventListener('keypress', onMainPinKeydown);
   deactivateForm();
   deactivateMapFilterForm();
 })();

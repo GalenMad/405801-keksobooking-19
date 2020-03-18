@@ -61,17 +61,17 @@
   };
 
   (function () {
-    var p = validationList.title;
+    var parameter = validationList.title;
 
     function validation() {
       if (titleInput.validity.valueMissing) {
-        titleInput.setCustomValidity(p.empty);
-      } else if (titleInput.value.length < p.minLength) {
-        titleInput.setCustomValidity(p.short(titleInput.value.length));
-      } else if (titleInput.value.length > p.maxLength) {
-        titleInput.setCustomValidity(p.long(titleInput.value.length));
+        titleInput.setCustomValidity(parameter.empty);
+      } else if (titleInput.value.length < parameter.minLength) {
+        titleInput.setCustomValidity(parameter.short(titleInput.value.length));
+      } else if (titleInput.value.length > parameter.maxLength) {
+        titleInput.setCustomValidity(parameter.long(titleInput.value.length));
       } else {
-        titleInput.setCustomValidity(p.valid);
+        titleInput.setCustomValidity(parameter.valid);
       }
     }
 
@@ -80,10 +80,10 @@
   })();
 
   (function () {
-    var p = validationList.price;
+    var parameter = validationList.price;
 
     function validation() {
-      priceInput.placeholder = p[typeInput.value].min;
+      priceInput.placeholder = parameter[typeInput.value].min;
     }
 
     validation();
@@ -91,17 +91,17 @@
   })();
 
   (function () {
-    var p = validationList.capacity;
+    var parameter = validationList.capacity;
 
     function validation() {
       if (Number(roomNumberInput.value) === 100 && Number(capacityInput.value) !== 0) {
-        capacityInput.setCustomValidity(p.roomsMismatch);
+        capacityInput.setCustomValidity(parameter.roomsMismatch);
       } else if (Number(roomNumberInput.value) !== 100 && Number(capacityInput.value) === 0) {
-        capacityInput.setCustomValidity(p.notIndicated);
+        capacityInput.setCustomValidity(parameter.notIndicated);
       } else if (Number(capacityInput.value) > Number(roomNumberInput.value)) {
-        capacityInput.setCustomValidity(p.roomsLack);
+        capacityInput.setCustomValidity(parameter.roomsLack);
       } else {
-        capacityInput.setCustomValidity(p.valid);
+        capacityInput.setCustomValidity(parameter.valid);
       }
     }
 
@@ -111,18 +111,18 @@
   })();
 
   (function () {
-    var p = validationList.price;
-    priceInput.setAttribute('max', p.max);
+    var parameter = validationList.price;
+    priceInput.setAttribute('max', parameter.max);
 
     function validation() {
       if (priceInput.validity.valueMissing) {
-        priceInput.setCustomValidity(p.empty);
-      } else if (p[typeInput.value].min > (+priceInput.value)) {
-        priceInput.setCustomValidity(p[typeInput.value].message);
-      } else if ((+priceInput.value) > p.max) {
-        priceInput.setCustomValidity(p.maxMessage);
+        priceInput.setCustomValidity(parameter.empty);
+      } else if (parameter[typeInput.value].min > (+priceInput.value)) {
+        priceInput.setCustomValidity(parameter[typeInput.value].message);
+      } else if ((+priceInput.value) > parameter.max) {
+        priceInput.setCustomValidity(parameter.maxMessage);
       } else {
-        priceInput.setCustomValidity(p.valid);
+        priceInput.setCustomValidity(parameter.valid);
       }
     }
 
@@ -132,9 +132,9 @@
   })();
 
   (function () {
-    var p = validationList.upload;
-    avatarInput.setAttribute(p.attribute, p.value);
-    imagesInput.setAttribute(p.attribute, p.value);
+    var parameter = validationList.upload;
+    avatarInput.setAttribute(parameter.attribute, parameter.value);
+    imagesInput.setAttribute(parameter.attribute, parameter.value);
   })();
 
   addressInput.setAttribute('readonly', 'readonly');
