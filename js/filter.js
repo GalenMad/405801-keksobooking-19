@@ -2,9 +2,12 @@
 
 (function () {
   var MAX_ADS_COUNT = 5;
+  var DEBOUNCE_INTERVAL = 500;
   var form = document.querySelector('.map__filters');
   var formSelects = form.querySelectorAll('select');
-  var features = form.querySelector('#housing-features');
+  var featuresFieldset = form.querySelector('#housing-features');
+  var features = featuresFieldset.querySelectorAll('input');
+  var lastTimeout;
 
   var filterList = {
     'housing-type': {
@@ -50,6 +53,13 @@
     'high': [50000, Infinity]
   };
 
+  function debounce(callback) {
+    if (lastTimeout) {
+      window.clearTimeout(lastTimeout);
+    }
+    lastTimeout = window.setTimeout(callback, DEBOUNCE_INTERVAL);
+  }
+
   function conversionType(first, second) {
     var type = typeof first;
     switch (type) {
@@ -60,7 +70,7 @@
         second = String(second);
         return second;
       default:
-        throw new Error('Непредвиденный тип переменной');
+        return second;
     }
   }
 
@@ -143,16 +153,16 @@
       window.pin.insert(trimByMaxCount(ads));
     }
 
-    window.debounce(insert);
+    debounce(insert);
   }
 
   formSelects.forEach(function (select) {
     select.addEventListener('input', setFilterStatus);
   });
-  features.addEventListener('input', setFilterListStatus);
+  featuresFieldset.addEventListener('input', setFilterListStatus);
+  window.handler.checkboxesFieldset(features);
 
   window.filter = {
-    trimByMax: trimByMaxCount
+    trim: trimByMaxCount
   };
-
 })();

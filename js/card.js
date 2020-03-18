@@ -26,7 +26,6 @@
   }
 
   function renderAdCard(ads, offerId) {
-
     var ad = ads[offerId];
     var card = adCardTemplate.cloneNode(true);
     var avatar = card.querySelector('.popup__avatar');
@@ -175,7 +174,7 @@
       checkData(item.key, item.element, item.callback);
     });
 
-    window.handlerPopup(currentCardClose, true, deselectPin);
+    window.handler.popup(currentCardClose, true, deselectPin);
     return card;
   }
 

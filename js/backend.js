@@ -31,7 +31,6 @@
   }
 
   window.backend = {
-
     load: function (onSuccess) {
       var URL = 'https://js.dump.academy/keksobooking/data';
       sendXHR('GET', URL, throwError, onSuccess);
@@ -41,7 +40,5 @@
       var URL = 'https://js.dump.academy/keksobooking';
       sendXHR('POST', URL, onError, onSuccess, data);
     }
-
   };
-
 })();
