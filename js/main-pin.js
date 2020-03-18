@@ -1,4 +1,5 @@
 'use strict';
+
 (function () {
   var COORDINATE_CORRECTION_X = 32;
   var COORDINATE_CORRECTION_Y = 84;
