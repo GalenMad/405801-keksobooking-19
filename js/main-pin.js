@@ -19,7 +19,6 @@
 
   function moveMainPin(evt) {
     evt.preventDefault();
-
     var start = {
       x: evt.clientX,
       y: evt.clientY
