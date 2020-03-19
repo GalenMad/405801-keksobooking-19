@@ -135,7 +135,6 @@
       if (ad.offer.photos.length) {
         var cardPhotos = document.createDocumentFragment();
         ad.offer.photos.forEach(function (src) {
-          console.log(src)
           var img = defaultPhoto.cloneNode(false);
           img.src = src;
           cardPhotos.prepend(img);
