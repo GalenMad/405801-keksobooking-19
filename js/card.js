@@ -11,6 +11,14 @@
     return titles[(number % 100 > 4 && number % 100 < 20) ? 2 : cases[(number % 10 < 5) ? number % 10 : 5]];
   }
 
+  function setTextContent(element, key) {
+    element.textContent = key;
+  }
+
+  function appendElement(element, key) {
+    element.append(key);
+  }
+
   function closeCurrentPopup() {
     var currentOpenCard = map.querySelector('.map__card.popup');
     if (currentOpenCard) {
@@ -122,14 +130,6 @@
         callback: appendElement
       },
     ];
-
-    function setTextContent(element, key) {
-      element.textContent = key;
-    }
-
-    function appendElement(element, key) {
-      element.append(key);
-    }
 
     function createPhotos() {
       if (ad.offer.photos.length) {
