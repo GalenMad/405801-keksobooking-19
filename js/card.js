@@ -134,11 +134,12 @@
     function createPhotos() {
       if (ad.offer.photos.length) {
         var cardPhotos = document.createDocumentFragment();
-        for (var k = ad.offer.photos.length - 1; k >= 0; k--) {
-          var photo = defaultPhoto.cloneNode(false);
-          photo.src = ad.offer.photos[k];
-          cardPhotos.prepend(photo);
-        }
+        ad.offer.photos.forEach(function (src) {
+          console.log(src)
+          var img = defaultPhoto.cloneNode(false);
+          img.src = src;
+          cardPhotos.prepend(img);
+        });
         return cardPhotos;
       } else {
         return null;
