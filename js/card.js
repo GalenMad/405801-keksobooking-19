@@ -91,10 +91,10 @@
   }
 
   window.card = {
-    insertAdCard: function (ads, offerId) {
+    insertAdCard: function (ad) {
       deselectPin();
       closeCurrentPopup();
-      map.insertBefore(renderAdCard(ads, offerId), mapFilter);
+      map.insertBefore(renderAdCard(ad), mapFilter);
     }
   };
 })();
