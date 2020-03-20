@@ -101,6 +101,7 @@
   avatarInput.setAttribute('accept', 'image/*');
   imagesInput.setAttribute('accept', 'image/*');
   priceInput.setAttribute('max', typePricesMap.limit.max);
+
   titleInput.addEventListener('input', titleValidation);
   priceInput.addEventListener('input', priceValidation);
   capacityInput.addEventListener('input', capacityValidation);

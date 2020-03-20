@@ -57,7 +57,6 @@
           return offset - axisShift;
         }
       }
-
       mainPin.style.left = (getFinishCoords('x')) + 'px';
       mainPin.style.top = (getFinishCoords('y')) + 'px';
     }
@@ -86,6 +85,5 @@
       setCoordinates();
     }
   };
-
   setCoordinates();
 })();

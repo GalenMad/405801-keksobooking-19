@@ -76,7 +76,7 @@
 
   function trimByMaxCount(ads) {
     var filteredAds = [];
-    for (var i = 0; i < 5 && i < ads.length; i++) {
+    for (var i = 0; i < MAX_ADS_COUNT && i < ads.length; i++) {
       filteredAds.push(ads[i]);
     }
     return filteredAds;

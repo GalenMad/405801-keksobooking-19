@@ -1,17 +1,19 @@
 'use strict';
 
 (function () {
+  var SUCCESS_CODE = 200;
+  var TIMEOUT = 10000;
   function throwError(message) {
     throw new Error(message);
   }
 
   function sendXHR(method, url, onError, onSuccess, data) {
     var xhr = new XMLHttpRequest();
-    xhr.timeout = 10000;
+    xhr.timeout = TIMEOUT;
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
-      if (xhr.status === 200) {
+      if (xhr.status === SUCCESS_CODE) {
         onSuccess(xhr.response);
       } else {
         onError('Произошла ошибка: ' + xhr.status + ' ' + xhr.statusText);

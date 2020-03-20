@@ -6,17 +6,17 @@
   var adPinList = document.querySelector('.map__pins');
   var adPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 
-  function renderPin(ads, counter) {
+  function renderPin(ad) {
     var offerPin = adPinTemplate.cloneNode(true);
     var adElementImage = offerPin.querySelector('img');
-    var adCoordinateX = ads[counter].location.x - PIN_WIDTH / 2;
-    var adCoordinateY = ads[counter].location.y - PIN_HEIGHT;
+    var adCoordinateX = ad.location.x - PIN_WIDTH / 2;
+    var adCoordinateY = ad.location.y - PIN_HEIGHT;
     offerPin.setAttribute('style', 'left:' + adCoordinateX + 'px; top:' + adCoordinateY + 'px;');
-    adElementImage.setAttribute('src', ads[counter].author.avatar);
-    adElementImage.setAttribute('alt', ads[counter].offer.title);
+    adElementImage.setAttribute('src', ad.author.avatar);
+    adElementImage.setAttribute('alt', ad.offer.title);
 
     offerPin.addEventListener('click', function () {
-      window.card.insertAdCard(ads, counter);
+      window.card.insertAdCard(ad);
       offerPin.classList.add('map__pin--active');
     });
     return offerPin;
@@ -24,9 +24,9 @@
 
   function renderAdPins(ads) {
     var templateList = document.createDocumentFragment();
-    ads.forEach(function (item, index, array) {
-      if (item && item.offer) {
-        templateList.append(renderPin(array, index));
+    ads.forEach(function (ad) {
+      if (ad && ad.offer) {
+        templateList.append(renderPin(ad));
       }
     });
     return templateList;
