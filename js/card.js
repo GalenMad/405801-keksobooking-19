@@ -6,9 +6,44 @@
   var adCardTemplate = document.querySelector('#card').content.querySelector('.map__card');
   var adPinList = document.querySelector('.map__pins');
 
+  var OfferTypeMap = {
+    'bungalo': 'Бунгало',
+    'house': 'Дом',
+    'flat': 'Квартира',
+    'palace': 'Дворец'
+  };
+
   function declOfNum(number, titles) {
     var cases = [2, 0, 1, 1, 1, 2];
     return titles[(number % 100 > 4 && number % 100 < 20) ? 2 : cases[(number % 10 < 5) ? number % 10 : 5]];
+  }
+
+  function getPhotosCollection(photos, templateElement) {
+    if (photos.length) {
+      var photosCollection = document.createDocumentFragment();
+      photos.forEach(function (src) {
+        var img = templateElement.cloneNode(false);
+        img.src = src;
+        photosCollection.prepend(img);
+      });
+      return photosCollection;
+    } else {
+      return null;
+    }
+  }
+
+  function getFeaturesCollection(features) {
+    if (features.length) {
+      var featuresCollection = document.createDocumentFragment();
+      features.forEach(function (feature) {
+        var featureElement = document.createElement('li');
+        featureElement.className = 'popup__feature popup__feature--' + feature;
+        featuresCollection.prepend(featureElement);
+      });
+      return featuresCollection;
+    } else {
+      return null;
+    }
   }
 
   function setTextContent(element, key) {
@@ -17,6 +52,14 @@
 
   function appendElement(element, key) {
     element.append(key);
+  }
+
+  function checkData(key, element, callback) {
+    if (key) {
+      callback(element, key);
+    } else {
+      element.remove();
+    }
   }
 
   function closeCurrentPopup() {
@@ -35,6 +78,7 @@
 
   function renderAdCard(ads, offerId) {
     var ad = ads[offerId];
+    var offer = ad.offer;
     var card = adCardTemplate.cloneNode(true);
     var avatar = card.querySelector('.popup__avatar');
     var title = card.querySelector('.popup__title');
@@ -49,13 +93,6 @@
     var defaultPhoto = photos.querySelector('.popup__photo');
     var currentCardClose = card.querySelector('.popup__close');
 
-    var offerTypeMap = {
-      'bungalo': 'Бунгало',
-      'house': 'Дом',
-      'flat': 'Квартира',
-      'palace': 'Дворец'
-    };
-
     var checkList = [
       {
         key: ad.author.avatar,
@@ -65,107 +102,71 @@
         }
       },
       {
-        key: ad.offer.title,
+        key: offer.title,
         element: title,
         callback: setTextContent
       },
       {
-        key: offerTypeMap[ad.offer.type],
+        key: OfferTypeMap[offer.type],
         element: type,
         callback: setTextContent
       },
       {
-        key: ad.offer.address,
+        key: offer.address,
         element: address,
         callback: setTextContent
       },
       {
-        key: ad.offer.description,
+        key: offer.description,
         element: description,
         callback: setTextContent
       },
       {
-        key: ad.offer.price,
+        key: offer.price,
         element: price,
         callback: function (element, key) {
           element.textContent = key + ' ₽/ночь';
         }
       },
       {
-        key: ad.offer.rooms,
+        key: offer.rooms,
         element: capacity,
         callback: function (element, key) {
           element.textContent = key + ' ' + declOfNum(key, ['комната', 'комнаты', 'комнат']);
         }
       },
       {
-        key: ad.offer.guests,
+        key: offer.guests,
         element: capacity,
         callback: function (element, key) {
           element.textContent += ' для ' + key + ' ' + declOfNum(key, ['гостя', 'гостей', 'гостей']);
         }
       },
       {
-        key: ad.offer.checkin,
+        key: offer.checkin,
         element: timing,
         callback: function (element, key) {
           element.textContent = 'Заезд после ' + key;
         }
       },
       {
-        key: ad.offer.checkout,
+        key: offer.checkout,
         element: timing,
         callback: function (element, key) {
           element.textContent += ', выезд до ' + key;
         }
       },
       {
-        key: createFeatures(),
+        key: getFeaturesCollection(offer.features),
         element: features,
         callback: appendElement
       },
       {
-        key: createPhotos(),
+        key: getPhotosCollection(offer.photos, defaultPhoto),
         element: photos,
         callback: appendElement
       },
     ];
-
-    function createPhotos() {
-      if (ad.offer.photos.length) {
-        var cardPhotos = document.createDocumentFragment();
-        ad.offer.photos.forEach(function (src) {
-          var img = defaultPhoto.cloneNode(false);
-          img.src = src;
-          cardPhotos.prepend(img);
-        });
-        return cardPhotos;
-      } else {
-        return null;
-      }
-    }
-
-    function createFeatures() {
-      if (ad.offer.features.length) {
-        var cardFeatures = document.createDocumentFragment();
-        ad.offer.features.forEach(function (item) {
-          var feature = document.createElement('li');
-          feature.className = 'popup__feature popup__feature--' + item;
-          cardFeatures.prepend(feature);
-        });
-        return cardFeatures;
-      } else {
-        return null;
-      }
-    }
-
-    function checkData(key, element, callback) {
-      if (key) {
-        callback(element, key);
-      } else {
-        element.remove();
-      }
-    }
 
     features.innerHTML = '';
     defaultPhoto.remove();
