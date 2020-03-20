@@ -18,7 +18,7 @@
     MAX: 100,
   };
 
-  var priceRangeMap = {
+  var typePricesMap = {
     limit: {
       max: 1000000,
       message: 'Цена не может быть больше миллиона',
@@ -60,17 +60,17 @@
     var message = '';
     if (priceInput.validity.valueMissing) {
       message = 'Введите цену предложения';
-    } else if (price < priceRangeMap[type].min) {
-      message = priceRangeMap[type].message;
-    } else if (price > priceRangeMap.limit.max) {
-      message = priceRangeMap.limit.message;
+    } else if (price < typePricesMap[type].min) {
+      message = typePricesMap[type].message;
+    } else if (price > typePricesMap.limit.max) {
+      message = typePricesMap.limit.message;
     }
     priceInput.setCustomValidity(message);
   }
 
   function typeValidation() {
     var type = typeInput.value;
-    priceInput.placeholder = priceRangeMap[type].min;
+    priceInput.placeholder = typePricesMap[type].min;
   }
 
   function capacityValidation() {
@@ -100,8 +100,7 @@
   priceInput.setAttribute('required', 'required');
   avatarInput.setAttribute('accept', 'image/*');
   imagesInput.setAttribute('accept', 'image/*');
-  priceInput.setAttribute('max', priceRangeMap.limit.max);
-
+  priceInput.setAttribute('max', typePricesMap.limit.max);
   titleInput.addEventListener('input', titleValidation);
   priceInput.addEventListener('input', priceValidation);
   capacityInput.addEventListener('input', capacityValidation);
@@ -113,12 +112,14 @@
     priceValidation();
   });
 
-  window.validationActivate = function () {
-    titleValidation();
-    priceValidation();
-    typeValidation();
-    capacityValidation();
-    timeOutValidation();
-    timeInValidation();
+  window.validation = {
+    activate: function () {
+      titleValidation();
+      priceValidation();
+      typeValidation();
+      capacityValidation();
+      timeOutValidation();
+      timeInValidation();
+    }
   };
 })();

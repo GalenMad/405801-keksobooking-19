@@ -47,7 +47,7 @@
     },
   };
 
-  var priceRangeMap = {
+  var PriceRangeMap = {
     'low': [0, 10000],
     'middle': [10000, 50000],
     'high': [50000, Infinity]
@@ -88,7 +88,7 @@
   }
 
   function checkByPriceRange(rangeValue, price) {
-    var range = priceRangeMap[rangeValue];
+    var range = PriceRangeMap[rangeValue];
     return (range[0] <= price && range[1] > price);
   }
 
@@ -148,12 +148,7 @@
         ads = item.callback(item.value, item.key, ads, item.condition);
       }
     });
-
-    function insert() {
-      window.pin.insert(trimByMaxCount(ads));
-    }
-
-    debounce(insert);
+    debounce(window.pin.insert(trimByMaxCount(ads)));
   }
 
   formSelects.forEach(function (select) {

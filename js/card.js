@@ -6,7 +6,7 @@
   var adCardTemplate = document.querySelector('#card').content.querySelector('.map__card');
   var adPinList = document.querySelector('.map__pins');
 
-  var OfferTypeMap = {
+  var OfferType = {
     'bungalo': 'Бунгало',
     'house': 'Дом',
     'flat': 'Квартира',
@@ -107,7 +107,7 @@
         callback: setTextContent
       },
       {
-        key: OfferTypeMap[offer.type],
+        key: OfferType[offer.type],
         element: type,
         callback: setTextContent
       },

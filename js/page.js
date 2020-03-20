@@ -91,7 +91,7 @@
     clearInputPreviews();
     form.classList.add('ad-form--disabled');
     form.reset();
-    window.validationActivate();
+    window.validation.activate();
   }
 
   function activateForm() {
